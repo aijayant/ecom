@@ -58,3 +58,4 @@ frontend/coverage/
 *.suo
 .DS_Store
 
+.env
