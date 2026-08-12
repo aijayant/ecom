@@ -35,4 +35,8 @@ public class UserService {
 		return dto;
 	}
 
+	public Optional<User> findByLoginId(String loginId) {
+	    return userRepository.findByLoginId(loginId);
+	}
+
 }
