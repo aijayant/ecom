@@ -34,6 +34,24 @@ public class UserService {
 		}
 		return dto;
 	}
+	
+	public void createUser(User user, String roleName) {
+		if(userRepository.existsByUsername(user.getUsername())) {
+			throw new RuntimeException("Error: Username is already taken!");
+		}
+		
+		if (userRepository.existsByEmail(user.getEmail())) {
+            throw new RuntimeException("Error: Email is already in use!");
+        }
+        if (userRepository.existsByPhoneNumber(user.getPhoneNumber())) {
+            throw new RuntimeException("Error: Phone number is already in use!");
+        }
+        
+        Role role = roleRepository.findByRoleName(roleName).orElseThrow(() -> new RuntimeException("Error: Role not found: " + roleName));
+        user.setRole(role);
+        
+        userRepository.save(user);
+	}
 
 	public Optional<User> findByLoginId(String loginId) {
 	    return userRepository.findByLoginId(loginId);
