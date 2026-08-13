@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 interface UserRepository extends JpaRepository<User, Long> {
 
 	@EntityGraph(attributePaths = { "role" })
-	@Query("SELECT u FROM User u WHERE u.username = :loginID OR u.email = :loginId OR u.phoneNumber = u.loginId")
+	@Query("SELECT u FROM User u WHERE u.username = :loginId OR u.email = :loginId OR u.phoneNumber = :loginId")
 	Optional<User> findByLoginId(@Param("loginId") String loginId);
 
 	boolean existsByUsername(String username);

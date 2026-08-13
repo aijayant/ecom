@@ -10,6 +10,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.ecom.infrastructure.web.exception.DuplicateResourceException;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -26,5 +28,11 @@ public class GlobalExceptionHandler {
 
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 	}
+	
+	 @ExceptionHandler(DuplicateResourceException.class)
+	    public ResponseEntity<ApiResponse<Void>> handleDuplicateResource(DuplicateResourceException ex) {
+	        ApiResponse<Void> response = ApiResponse.error(409, ex.getMessage());
+	        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+	    }
 
 }

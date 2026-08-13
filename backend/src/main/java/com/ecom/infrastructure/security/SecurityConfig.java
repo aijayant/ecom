@@ -25,8 +25,9 @@ public class SecurityConfig {
 	private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
 	private static final String[] PUBLIC_URLS = { "/api/auth/**", "/v3/api-docs/**", "/swagger-ui/**",
-			"/swagger-ui.html" };
+			"/swagger-ui.html", "/error", };
 
+	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.csrf(AbstractHttpConfigurer::disable)
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

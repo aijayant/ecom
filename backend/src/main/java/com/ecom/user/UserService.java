@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.ecom.infrastructure.web.exception.DuplicateResourceException;
 import com.ecom.user.dto.UserResponseDTO;
 
 @Service
@@ -37,14 +38,14 @@ public class UserService {
 	
 	public void createUser(User user, String roleName) {
 		if(userRepository.existsByUsername(user.getUsername())) {
-			throw new RuntimeException("Error: Username is already taken!");
+			throw new DuplicateResourceException("Username is already taken: " + user.getUsername());
 		}
 		
 		if (userRepository.existsByEmail(user.getEmail())) {
-            throw new RuntimeException("Error: Email is already in use!");
+            throw new DuplicateResourceException("Email is already in use: " + user.getEmail());
         }
         if (userRepository.existsByPhoneNumber(user.getPhoneNumber())) {
-            throw new RuntimeException("Error: Phone number is already in use!");
+            throw new DuplicateResourceException("Phone number is already in use: " + user.getPhoneNumber());
         }
         
         Role role = roleRepository.findByRoleName(roleName).orElseThrow(() -> new RuntimeException("Error: Role not found: " + roleName));
