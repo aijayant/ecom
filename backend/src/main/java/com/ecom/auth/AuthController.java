@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ecom.auth.dto.AuthResponseDTO;
 import com.ecom.auth.dto.LoginRequestDTO;
 import com.ecom.auth.dto.RegisterRequestDTO;
+import com.ecom.auth.dto.RefreshTokenRequestDTO;
 import com.ecom.infrastructure.web.ApiResponse;
 
 import jakarta.validation.Valid;
@@ -32,6 +33,13 @@ public class AuthController {
 	public ResponseEntity<ApiResponse<AuthResponseDTO>> register(@Valid @RequestBody RegisterRequestDTO request) {
 		AuthResponseDTO tokenData = authService.register(request);
 		return ResponseEntity.ok(ApiResponse.success(201, "Registration successful", tokenData));
+	}
+
+	@PostMapping("/refresh")
+	public ResponseEntity<ApiResponse<AuthResponseDTO>> refreshToken(
+			@Valid @RequestBody RefreshTokenRequestDTO request) {
+		AuthResponseDTO tokenData = authService.refreshToken(request);
+		return ResponseEntity.ok(ApiResponse.success(200, "Token refreshed successfully", tokenData));
 	}
 
 }
