@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
+import com.ecom.infrastructure.security.JwtProperties;
 import com.ecom.user.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -14,10 +15,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class RefreshTokenService {
 
-	// Refresh tokens live for 7 days (in milliseconds)
-	private final long REFRESH_TOKEN_DURATION_MS = 604800000L;
 	private final RefreshTokenRepository refreshTokenRepository;
 	private final UserService userService;
+	private final JwtProperties jwtProperties;
 
 	public RefreshToken createRefreshToken(String username) {
 
@@ -28,7 +28,7 @@ public class RefreshTokenService {
 				.setUser(userService.findByLoginId(username).orElseThrow(() -> new RuntimeException("User Not Found")));
 
 		refreshToken.setToken(UUID.randomUUID().toString());
-		refreshToken.setExpiryDate(Instant.now().plusMillis(REFRESH_TOKEN_DURATION_MS));
+		refreshToken.setExpiryDate(Instant.now().plusMillis(jwtProperties.refreshExpiration()));
 
 		return refreshTokenRepository.save(refreshToken);
 

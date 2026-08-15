@@ -10,21 +10,26 @@ import org.springframework.stereotype.Component;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 
 @Component
+@RequiredArgsConstructor // <--- Lombok automatically injects our JwtProperties here!
 public class JwtUtil {
 
-	@Value("${jwt.secret}")
-	private String secretKey;
+//	@Value("${jwt.secret}")
+//	private String secretKey;
+//
+//	@Value("${jwt.expiration}")
+//	private long jwtExpiration;
 
-	@Value("${jwt.expiration}")
-	private long jwtExpiration;
+	// ✅ Clean, strongly typed record instead of @Value strings
+	private final JwtProperties jwtProperties;
 
 	// Converts the raw string from application.properties into a real cryptographic
 	// key
 	private SecretKey getSigningKey() {
 
-		byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+		byte[] keyBytes = Decoders.BASE64.decode(jwtProperties.secret());
 		return Keys.hmacShaKeyFor(keyBytes);
 
 	}
@@ -32,7 +37,8 @@ public class JwtUtil {
 	// Job 1: Generate a token when user logs in
 	public String generateToken(String username) {
 		return Jwts.builder().subject(username).issuedAt(new Date(System.currentTimeMillis()))
-				.expiration(new Date(System.currentTimeMillis() + jwtExpiration)).signWith(getSigningKey()).compact();
+				.expiration(new Date(System.currentTimeMillis() + jwtProperties.expiration())).signWith(getSigningKey())
+				.compact();
 	}
 
 	// Job 2: Extract the username from a token
