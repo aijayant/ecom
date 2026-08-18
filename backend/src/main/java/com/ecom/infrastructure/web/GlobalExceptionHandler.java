@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.ecom.infrastructure.web.exception.DuplicateResourceException;
+import com.ecom.infrastructure.web.exception.ResourceNotFoundException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -29,10 +30,16 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 	}
 	
-	 @ExceptionHandler(DuplicateResourceException.class)
-	    public ResponseEntity<ApiResponse<Void>> handleDuplicateResource(DuplicateResourceException ex) {
-	        ApiResponse<Void> response = ApiResponse.error(409, ex.getMessage());
-	        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
-	    }
+	@ExceptionHandler(DuplicateResourceException.class)
+	public ResponseEntity<ApiResponse<Void>> handleDuplicateResource(DuplicateResourceException ex) {
+		ApiResponse<Void> response = ApiResponse.error(409, ex.getMessage());
+		return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+	}
+
+	@ExceptionHandler(ResourceNotFoundException.class)
+	public ResponseEntity<ApiResponse<Void>> handleResourceNotFound(ResourceNotFoundException ex) {
+		ApiResponse<Void> response = ApiResponse.error(404, ex.getMessage());
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+	}
 
 }

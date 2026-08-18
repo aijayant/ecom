@@ -11,6 +11,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,23 +29,33 @@ public class User extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(unique = true, nullable = false)
+	@NotBlank(message = "Username cannot be blank") // Stops Java from saving empty strings
+	@Size(min = 3, max = 20, message = "Username must be between 3 and 20 characters")
+	@Column(unique = true, nullable = false, length = 20) // Configures the actual DB column
 	private String username;
 
+	@NotBlank(message = "Password cannot be blank")
 	@Column(nullable = false)
 	private String password;
 
+	@NotBlank(message = "Email is required")
+	@Email(message = "Please provide a valid email address")
 	@Column(unique = true, nullable = false)
 	private String email;
 
+	@NotBlank(message = "Phone number is required")
+	@Pattern(regexp = "^\\+?[1-9]\\d{1,14}$", message = "Phone number must be in valid E.164 format (e.g. +1234567890)")
 	@Column(name = "phone_number", unique = true, nullable = false)
 	private String phoneNumber;
 
+	@NotBlank(message = "Full name is required")
+	@Size(min = 2, max = 50, message = "Full name must be between 2 and 50 characters")
 	@Column(name = "full_name", nullable = false)
 	private String fullName;
 
+	@NotNull(message = "Role association is required")
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "role_id")
+	@JoinColumn(name = "role_id", nullable = false) // Added nullable = false to enforce it in DB
 	private Role role;
 
 }
