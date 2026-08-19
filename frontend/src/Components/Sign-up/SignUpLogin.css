@@ -68,10 +68,10 @@
 }
 
 .Signup-main p span {
-  color: tomato;
+  color: #263238;
   font-weight: 500;
   cursor: pointer;
 }
 .Signup-main p span:hover {
-  border-bottom: 1px solid tomato;
+  border-bottom: 1px solid #263238;
 }
