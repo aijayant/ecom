@@ -8,7 +8,10 @@
   color: #fff;
   padding: 0 30px;
 }
+.announcement-content p{
+  margin: auto;
+}
 
 .announcement-content .delivery p span{
-    color: gold;
+  color: gold;
 }
