@@ -5,6 +5,7 @@ import SignUpLogin from './Components/Sign-up/SignUpLogin';
 import {  Route, Routes } from 'react-router-dom'
 import Home from './Pages/Home/Home';
 import Cart from './Pages/Cart/Cart';
+import Announcement from './Components/Announcement/Announcement';
 
 const App = () => {
 
@@ -14,6 +15,7 @@ const App = () => {
     <>
         {showSignUp ? <SignUpLogin setShowSignUp={setShowSignUp} /> : <></>}
         <div className="app">
+          <Announcement/>
           <Navbar setShowSignUp={setShowSignUp} />
 
           <Routes>
