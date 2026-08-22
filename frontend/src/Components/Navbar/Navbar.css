@@ -5,6 +5,11 @@
   --border-gray: #c9c9c9;
 }
 
+.navbar-main{
+    margin-top: 7px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+}
+
 .navbar {
   padding: 20px 0px;
   display: flex;
