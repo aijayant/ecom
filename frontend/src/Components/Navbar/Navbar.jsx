@@ -45,7 +45,7 @@ const Navbar = ({ setShowSignUp }) => {
         </div>
          
       </div>
-      <hr />
+      {/* <hr /> */}
     </div>
   )
 }
