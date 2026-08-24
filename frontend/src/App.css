@@ -1,4 +1,11 @@
-.app{
-    width: 100%;
-    margin: 2px;
+/* App-level styles — add global layout overrides here */
+
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+main {
+  min-height: calc(100vh - 80px);
 }
