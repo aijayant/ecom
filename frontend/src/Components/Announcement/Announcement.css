@@ -1,0 +1,17 @@
+.announcement-content {
+  width: 100%;
+  height: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #121b26;
+  color: #fff;
+  padding: 0 30px;
+}
+.announcement-content p{
+  margin: auto;
+}
+
+.announcement-content .delivery p span{
+  color: gold;
+}
