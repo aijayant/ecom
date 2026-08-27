@@ -4,13 +4,16 @@ import { FaSearch } from 'react-icons/fa'
 import { AiOutlineShoppingCart } from 'react-icons/ai'
 import { CgProfile } from 'react-icons/cg'
 import { Link } from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
 
 /**
  * Global Navbar — shared UI component.
  * Accepts `setShowSignUp` for backward compat during migration.
  * TODO: Replace with useAuth hook once auth feature is wired up.
  */
-const Navbar = ({ setShowSignUp }) => {
+const Navbar = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="navbar-main">
       <div className="navbar">
@@ -36,7 +39,7 @@ const Navbar = ({ setShowSignUp }) => {
               <AiOutlineShoppingCart />
             </div>
           </Link>
-          <button onClick={() => setShowSignUp?.(true)}>Login</button>
+          <button onClick={() =>navigate("/login") }>Login</button>
         </div>
       </div>
       <hr />

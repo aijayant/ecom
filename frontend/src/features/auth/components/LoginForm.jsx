@@ -30,7 +30,7 @@ const LoginForm = ({ onSubmit, onSwitchToRegister, isLoading, error }) => {
 
       {/* Error Banner */}
       {error && (
-        <div className="bg-[#ffdad6] border border-[#ba1a1a] text-[#93000a] text-sm rounded-lg px-4 py-3">
+        <div className="bg-error-container border border-error text-on-error-container text-sm rounded-lg px-4 py-3">
           {error}
         </div>
       )}
@@ -44,7 +44,7 @@ const LoginForm = ({ onSubmit, onSwitchToRegister, isLoading, error }) => {
           Email Address
         </label>
         <input
-          className="form-input w-full bg-white border border-[#e2e2e4] rounded-lg px-3 py-3 text-[15px] text-[#1a1c1d] placeholder-[#727784]"
+          className="form-input w-full bg-white border border-[#e2e2e4] rounded-lg px-3 py-3 text-[15px] text-[#1a1c1d] placeholder-outline"
           id="signin-email"
           name="email"
           type="email"
@@ -66,14 +66,14 @@ const LoginForm = ({ onSubmit, onSwitchToRegister, isLoading, error }) => {
           </label>
           <a
             href="#"
-            className="text-[13px] font-medium text-[#004e9f] hover:underline"
+            className="text-[13px] font-medium text-primary hover:underline"
           >
             Forgot Password?
           </a>
         </div>
         <div className="relative">
           <input
-            className="form-input w-full bg-white border border-[#e2e2e4] rounded-lg px-3 py-3 pr-10 text-[15px] text-[#1a1c1d] placeholder-[#727784]"
+            className="form-input w-full bg-white border border-[#e2e2e4] rounded-lg px-3 py-3 pr-10 text-[15px] text-[#1a1c1d] placeholder-outline"
             id="signin-password"
             name="password"
             type={showPassword ? 'text' : 'password'}
@@ -84,7 +84,7 @@ const LoginForm = ({ onSubmit, onSwitchToRegister, isLoading, error }) => {
           />
           <button
             type="button"
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-[#414753] hover:text-[#004e9f] transition-colors"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-primary transition-colors"
             onClick={() => setShowPassword((v) => !v)}
             aria-label={showPassword ? 'Hide password' : 'Show password'}
           >
@@ -102,18 +102,18 @@ const LoginForm = ({ onSubmit, onSwitchToRegister, isLoading, error }) => {
       <button
         type="submit"
         disabled={isLoading}
-        className="w-full bg-[#004e9f] hover:bg-[#00458e] disabled:opacity-60 disabled:cursor-not-allowed text-white text-[13px] font-semibold tracking-[0.01em] py-3 rounded-lg transition-colors duration-200 min-h-[44px]"
+        className="w-full bg-primary hover:bg-on-primary-fixed-variant disabled:opacity-60 disabled:cursor-not-allowed text-white text-[13px] font-semibold tracking-[0.01em] py-3 rounded-lg transition-colors duration-200 min-h-11"
       >
         {isLoading ? 'Signing in...' : 'Sign In'}
       </button>
 
       {/* Switch to Register */}
-      <p className="text-center text-[13px] text-[#414753]">
+      <p className="text-center text-[13px] text-on-surface-variant">
         Don&apos;t have an account?{' '}
         <button
           type="button"
           onClick={onSwitchToRegister}
-          className="text-[#004e9f] font-medium hover:underline"
+          className="text-primary font-medium hover:underline"
         >
           Create Account
         </button>

@@ -2,8 +2,10 @@ import React from 'react'
 import { Routes, Route } from 'react-router-dom'
 
 // ─── Core UI ─────────────────────────────────────────────────────────────────
+import Announcement from '../Components/Announcement/Announcement'
 import { Navbar } from '../core/ui'
 import ProtectedRoute from '../core/security/components/ProtectedRoute'
+import FooterPage from '../pages/FooterPage'
 
 // ─── Pages ───────────────────────────────────────────────────────────────────
 import HomePage       from '../pages/HomePage'
@@ -33,6 +35,7 @@ import PlaceOrderPage from '../pages/PlaceOrderPage'
 const AppRoutes = () => {
   return (
     <>
+    {/* <Announcement/> */}
       <Navbar />
 
       <main>
@@ -43,7 +46,7 @@ const AppRoutes = () => {
           <Route path="/login" element={<LoginPage />} />
 
           {/* ── Protected routes (require valid JWT) ───────────────────────── */}
-          <Route element={<ProtectedRoute />}>
+          <Route >{/* <element={<ProtectedRoute />} */}
             <Route path="/dashboard"  element={<DashboardPage />} />
             <Route path="/profile"    element={<ProfilePage />} />
             <Route path="/cart"       element={<CartPage />} />
@@ -54,6 +57,7 @@ const AppRoutes = () => {
 
         </Routes>
       </main>
+      <FooterPage/>
     </>
   )
 }
