@@ -42,4 +42,10 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
 	}
 
+	@ExceptionHandler(org.springframework.dao.DataIntegrityViolationException.class)
+	public ResponseEntity<ApiResponse<Void>> handleDataIntegrityViolation(org.springframework.dao.DataIntegrityViolationException ex) {
+		ApiResponse<Void> response = ApiResponse.error(409, "A database conflict occurred: resource already exists or violates integrity rules.");
+		return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+	}
+
 }
