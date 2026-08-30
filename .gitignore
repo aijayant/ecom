@@ -59,3 +59,4 @@ frontend/coverage/
 .DS_Store
 
 .env
+*.md

@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 import com.ecom.infrastructure.security.JwtProperties;
+import com.ecom.infrastructure.web.exception.ResourceNotFoundException;
 import com.ecom.user.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -24,8 +25,8 @@ public class RefreshTokenService {
 		RefreshToken refreshToken = new RefreshToken();
 
 		// ✅ Call the service to find the user
-		refreshToken
-				.setUser(userService.findByLoginId(username).orElseThrow(() -> new RuntimeException("User Not Found")));
+		refreshToken.setUser(
+				userService.findByLoginId(username).orElseThrow(() -> new ResourceNotFoundException("User Not Found")));
 
 		refreshToken.setToken(UUID.randomUUID().toString());
 		refreshToken.setExpiryDate(Instant.now().plusMillis(jwtProperties.refreshExpiration()));
@@ -38,7 +39,7 @@ public class RefreshTokenService {
 
 		if (token.getExpiryDate().compareTo(Instant.now()) < 0) {
 			refreshTokenRepository.delete(token);
-			throw new RuntimeException("Refresh token was expired. Please make a new signin request");
+			throw new IllegalArgumentException("Refresh token was expired. Please make a new signin request");
 		}
 
 		return token;
