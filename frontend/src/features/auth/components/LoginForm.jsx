@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
+
 
 /**
  * LoginForm
@@ -64,12 +66,17 @@ const LoginForm = ({ onSubmit, onSwitchToRegister, isLoading, error }) => {
           >
             Password
           </label>
-          <a
+          {/* <a
             href="#"
             className="text-[13px] font-medium text-primary hover:underline"
           >
             Forgot Password?
-          </a>
+          </a> */}
+
+          <Link to="/forgot-password" className='text-[13px] font-medium text-primary hover:underline'>
+            Forgot Password?
+          </Link>
+
         </div>
         <div className="relative">
           <input
@@ -77,7 +84,7 @@ const LoginForm = ({ onSubmit, onSwitchToRegister, isLoading, error }) => {
             id="signin-password"
             name="password"
             type={showPassword ? 'text' : 'password'}
-            placeholder="••••••••"
+            placeholder="*******"
             value={formData.password}
             onChange={handleChange}
             required
