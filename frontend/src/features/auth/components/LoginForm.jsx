@@ -87,8 +87,16 @@ const LoginForm = ({ onSubmit, onSwitchToRegister, isLoading, error }) => {
             placeholder="*******"
             value={formData.password}
             onChange={handleChange}
+            pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}"
+            title="Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character"
             required
           />
+
+          {formData.password && formData.password.length < 8 && (
+            <p className="text-xs text-red-500">
+              Password must be at least 8 characters.
+            </p>
+          )}
           <button
             type="button"
             className="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-primary transition-colors"
@@ -111,7 +119,7 @@ const LoginForm = ({ onSubmit, onSwitchToRegister, isLoading, error }) => {
         disabled={isLoading}
         className="w-full bg-primary hover:bg-on-primary-fixed-variant disabled:opacity-60 disabled:cursor-not-allowed text-white text-[13px] font-semibold tracking-[0.01em] py-3 rounded-lg transition-colors duration-200 min-h-11"
       >
-        {isLoading ? 'Signing in...' : 'Sign In'}
+        {isLoading ? 'Signing in...' : 'Login'}
       </button>
 
       {/* Switch to Register */}
