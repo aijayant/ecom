@@ -10,6 +10,7 @@ import com.ecom.auth.dto.RegisterRequest;
 import com.ecom.auth.dto.RefreshTokenRequest;
 import com.ecom.infrastructure.security.JwtUtil;
 import com.ecom.infrastructure.web.exception.ResourceNotFoundException;
+import com.ecom.user.User;
 import com.ecom.user.UserService;
 import com.ecom.user.dto.CreateUserRequest;
 import com.ecom.user.dto.UserResponse;
@@ -25,22 +26,53 @@ public class AuthService {
 	private final UserService userService;
 	private final RefreshTokenService refreshTokenService;
 
+//	public AuthResponse login(LoginRequest request) {
+//
+//		// 1. This tells Spring Security to check the password against the DB (via our
+//		// CustomUserDetailsService)
+//		// If the password is wrong, this will automatically throw an exception and
+//		// stop.
+//		authenticationManager
+//				.authenticate(new UsernamePasswordAuthenticationToken(request.getLoginId(), request.getPassword()));
+//
+//		// 2. If we reach here, the password was correct! Generate the JWT token.
+//		String jwtToken = jwtUtil.generateToken(request.getLoginId());
+//
+//		RefreshToken refreshToken = refreshTokenService.createRefreshToken(request.getLoginId());
+//
+//		return new AuthResponse(jwtToken, refreshToken.getToken(), "Login successful");
+//	}
+	
 	public AuthResponse login(LoginRequest request) {
 
-		// 1. This tells Spring Security to check the password against the DB (via our
-		// CustomUserDetailsService)
-		// If the password is wrong, this will automatically throw an exception and
-		// stop.
-		authenticationManager
-				.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+	    authenticationManager.authenticate(
+	        new UsernamePasswordAuthenticationToken(
+	            request.getLoginId(),
+	            request.getPassword()
+	        )
+	    );
 
-		// 2. If we reach here, the password was correct! Generate the JWT token.
-		String jwtToken = jwtUtil.generateToken(request.getUsername());
+	    User user = userService.findByLoginId(request.getLoginId())
+	            .orElseThrow(() ->
+	                new ResourceNotFoundException(
+	                    "User not found: " + request.getLoginId()
+	                )
+	            );
 
-		RefreshToken refreshToken = refreshTokenService.createRefreshToken(request.getUsername());
+	    String username = user.getUsername();
 
-		return new AuthResponse(jwtToken, refreshToken.getToken(), "Login successful");
+	    String jwtToken = jwtUtil.generateToken(username);
+
+	    RefreshToken refreshToken =
+	        refreshTokenService.createRefreshToken(username);
+
+	    return new AuthResponse(
+	        jwtToken,
+	        refreshToken.getToken(),
+	        "Login successful"
+	    );
 	}
+
 
 	public AuthResponse register(RegisterRequest request) {
 

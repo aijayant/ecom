@@ -33,12 +33,14 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
 //	}
 
 	@Override
-	public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException {
-		
+	public void handle(HttpServletRequest request, HttpServletResponse response,
+			AccessDeniedException accessDeniedException) throws IOException {
+
 		response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-		
-		ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, "Forbidden: You don't have permission to access this resource");
+
+		ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN,
+				"Forbidden: You don't have permission to access this resource");
 		problem.setTitle("Access Denied");
 
 		jsonMapper.writeValue(response.getOutputStream(), problem);

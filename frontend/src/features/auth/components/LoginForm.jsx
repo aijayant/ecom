@@ -15,7 +15,7 @@ import { Link } from 'react-router-dom'
  *  - error                — error string to display
  */
 const LoginForm = ({ onSubmit, onSwitchToRegister, isLoading, error }) => {
-  const [formData, setFormData] = useState({ email: '', password: '' })
+  const [formData, setFormData] = useState({ loginId: '', password: '' })
   const [showPassword, setShowPassword] = useState(false)
 
   const handleChange = (e) => {
@@ -41,17 +41,17 @@ const LoginForm = ({ onSubmit, onSwitchToRegister, isLoading, error }) => {
       <div className="space-y-1">
         <label
           className="block text-[13px] font-medium tracking-[0.01em] text-[#1a1c1d]"
-          htmlFor="signin-email"
+          htmlFor="signin-loginId"
         >
-          Email Address
+          Enter login Id
         </label>
         <input
           className="form-input w-full bg-white border border-[#e2e2e4] rounded-lg px-3 py-3 text-[15px] text-[#1a1c1d] placeholder-outline"
-          id="signin-email"
-          name="email"
-          type="email"
-          placeholder="name@example.com"
-          value={formData.email}
+          id="signin-loginId"
+          name="loginId"
+          type="text"
+          placeholder="Username / Email / Phone No."
+          value={formData.loginId}
           onChange={handleChange}
           required
         />

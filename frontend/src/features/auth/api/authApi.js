@@ -9,7 +9,7 @@ import apiClient from '../../../core/config/apiConfig'
 
 /**
  * POST /auth/login
- * @param {{ email: string, password: string }} credentials
+ * @param {{ loginId: string, password: string }} credentials
  */
 export const login = (credentials) =>
   apiClient.post('/auth/login', credentials)
