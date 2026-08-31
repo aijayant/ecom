@@ -54,7 +54,7 @@
   --radius-full: 9999px;
 
   /* Font */
-  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-sans: "Inter", system-ui, sans-serif;
 }
 
 /* ─── Global Reset ───────────────────────────────────────────────────────── */
@@ -62,8 +62,6 @@
 *::before,
 *::after {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
 }
 
 body {
@@ -79,7 +77,9 @@ body {
 }
 
 .form-input {
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .form-input:focus {
