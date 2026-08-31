@@ -8,13 +8,13 @@ import ProtectedRoute from '../core/security/components/ProtectedRoute'
 import FooterPage from '../pages/FooterPage'
 
 // ─── Pages ───────────────────────────────────────────────────────────────────
-import HomePage       from '../pages/HomePage'
-import LoginPage      from '../pages/LoginPage'
-import ProfilePage    from '../pages/ProfilePage'
-import DashboardPage  from '../pages/DashboardPage'
-import CartPage       from '../pages/CartPage'
-import AdminPage      from '../pages/AdminPage'
-import PaymentPage    from '../pages/PaymentPage'
+import HomePage from '../pages/HomePage'
+import LoginPage from '../pages/LoginPage'
+import ProfilePage from '../pages/ProfilePage'
+import DashboardPage from '../pages/DashboardPage'
+import CartPage from '../pages/CartPage'
+import AdminPage from '../pages/AdminPage'
+import PaymentPage from '../pages/PaymentPage'
 import PlaceOrderPage from '../pages/PlaceOrderPage'
 
 /**
@@ -42,17 +42,17 @@ const AppRoutes = () => {
         <Routes>
 
           {/* ── Public routes ──────────────────────────────────────────────── */}
-          <Route path="/"      element={<HomePage />} />
+          <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
 
           {/* ── Protected routes (require valid JWT) ───────────────────────── */}
-          <Route >{/* <element={<ProtectedRoute />} */}
-            <Route path="/dashboard"  element={<DashboardPage />} />
-            <Route path="/profile"    element={<ProfilePage />} />
-            <Route path="/cart"       element={<CartPage />} />
-            <Route path="/order"      element={<PlaceOrderPage />} />
-            <Route path="/payment"    element={<PaymentPage />} />
-            <Route path="/admin"      element={<AdminPage />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/cart" element={<CartPage />} />
+            <Route path="/order" element={<PlaceOrderPage />} />
+            <Route path="/payment" element={<PaymentPage />} />
+            <Route path="/admin" element={<AdminPage />} />
           </Route>
 
         </Routes>

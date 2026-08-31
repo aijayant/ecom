@@ -2,16 +2,17 @@ package com.ecom.auth;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.ecom.auth.dto.AuthResponseDTO;
-import com.ecom.auth.dto.LoginRequestDTO;
-import com.ecom.auth.dto.RegisterRequestDTO;
-import com.ecom.auth.dto.RefreshTokenRequestDTO;
+import com.ecom.auth.dto.AuthResponse;
+import com.ecom.auth.dto.LoginRequest;
+import com.ecom.auth.dto.RegisterRequest;
+import com.ecom.auth.dto.RefreshTokenRequest;
 import com.ecom.infrastructure.security.JwtUtil;
-import com.ecom.user.User;
+import com.ecom.infrastructure.web.exception.ResourceNotFoundException;
 import com.ecom.user.UserService;
+import com.ecom.user.dto.CreateUserRequest;
+import com.ecom.user.dto.UserResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,10 +23,9 @@ public class AuthService {
 	private final AuthenticationManager authenticationManager;
 	private final JwtUtil jwtUtil;
 	private final UserService userService;
-	private final PasswordEncoder passwordEncoder;
 	private final RefreshTokenService refreshTokenService;
 
-	public AuthResponseDTO login(LoginRequestDTO request) {
+	public AuthResponse login(LoginRequest request) {
 
 		// 1. This tells Spring Security to check the password against the DB (via our
 		// CustomUserDetailsService)
@@ -39,24 +39,28 @@ public class AuthService {
 
 		RefreshToken refreshToken = refreshTokenService.createRefreshToken(request.getUsername());
 
-		return new AuthResponseDTO(jwtToken, refreshToken.getToken(), "Login successful");
+		return new AuthResponse(jwtToken, refreshToken.getToken(), "Login successful");
 	}
 
-	public AuthResponseDTO register(RegisterRequestDTO request) {
+	public AuthResponse register(RegisterRequest request) {
 
-		User user = convertToEntity(request);
+		CreateUserRequest createUserRequest = new CreateUserRequest();
+		createUserRequest.setUsername(request.getUsername());
+		createUserRequest.setPassword(request.getPassword());
+		createUserRequest.setEmail(request.getEmail());
+		createUserRequest.setPhoneNumber(request.getPhoneNumber());
+		createUserRequest.setFullName(request.getFullName());
+		createUserRequest.setRoleName("USER");
 
-		user.setPassword(passwordEncoder.encode(request.getPassword()));
-
-		userService.createUser(user, "USER");
+		UserResponse user = userService.createUser(createUserRequest);
 
 		String jwtToken = jwtUtil.generateToken(user.getUsername());
 		RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getUsername());
-		return new AuthResponseDTO(jwtToken, refreshToken.getToken(), "User registered successfully");
+		return new AuthResponse(jwtToken, refreshToken.getToken(), "User registered successfully");
 
 	}
 
-	public AuthResponseDTO refreshToken(RefreshTokenRequestDTO request) {
+	public AuthResponse refreshToken(RefreshTokenRequest request) {
 		// CUSTOM LOGIC:
 		// Find the token -> Verify it's not expired -> Get the User -> Generate new
 		// Access Token
@@ -64,18 +68,9 @@ public class AuthService {
 		return refreshTokenService.findByToken(request.getRefreshToken()).map(refreshTokenService::verifyExpiration)
 				.map(RefreshToken::getUser).map(user -> {
 					String newAccessToken = jwtUtil.generateToken(user.getUsername());
-					return new AuthResponseDTO(newAccessToken, request.getRefreshToken(),
+					return new AuthResponse(newAccessToken, request.getRefreshToken(),
 							"Token refreshed successfully");
-				}).orElseThrow(() -> new RuntimeException("Refresh token is not in database!"));
-	}
-
-	private User convertToEntity(RegisterRequestDTO request) {
-		User user = new User();
-		user.setUsername(request.getUsername());
-		user.setEmail(request.getEmail());
-		user.setPhoneNumber(request.getPhoneNumber());
-		user.setFullName(request.getFullName());
-		return user;
+				}).orElseThrow(() -> new ResourceNotFoundException("Refresh token is not in database!"));
 	}
 
 }
