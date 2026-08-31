@@ -13,12 +13,14 @@ import React, { useState } from 'react'
  *  - error               — error string to display
  */
 const RegisterForm = ({ onSubmit, onSwitchToLogin, isLoading, error }) => {
-  const [formData, setFormData] = useState({ name: '', email: '', password: '' })
+  const [formData, setFormData] = useState({ name: '', username: '', number: '', email: '', password: '' })
   const [showPassword, setShowPassword] = useState(false)
 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }))
   }
+
+  console.log(formData)
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -40,9 +42,7 @@ const RegisterForm = ({ onSubmit, onSwitchToLogin, isLoading, error }) => {
         <label
           className="block text-[13px] font-medium tracking-[0.01em] text-[#1a1c1d]"
           htmlFor="register-name"
-        >
-          Full Name
-        </label>
+        >Full Name</label>
         <input
           className="form-input w-full bg-white border border-[#e2e2e4] rounded-lg px-3 py-3 text-[15px] text-[#1a1c1d] placeholder-outline"
           id="register-name"
@@ -51,8 +51,70 @@ const RegisterForm = ({ onSubmit, onSwitchToLogin, isLoading, error }) => {
           placeholder="John Doe"
           value={formData.name}
           onChange={handleChange}
+          minLength={2}
+          maxLength={50}
+          pattern="[A-Za-z]+(?: [A-Za-z]+)*"
+          title="Please enter a valid name"
           required
         />
+        {formData.name && !/^[A-Za-z]+(?: [A-Za-z]+)*$/.test(formData.name) && (
+          <p className="text-xs text-red-500">
+            Please enter a valid full name.
+          </p>
+        )}
+      </div>
+
+      {/* UserName */}
+      <div className="space-y-1">
+        <label
+          className="block text-[13px] font-medium tracking-[0.01em] text-[#1a1c1d]"
+          htmlFor="register-username"
+        >Username</label>
+        <input
+          className="form-input w-full bg-white border border-[#e2e2e4] rounded-lg px-3 py-3 text-[15px] text-[#1a1c1d] placeholder-outline"
+          id="register-name"
+          name="username"
+          type="text"
+          placeholder="username"
+          value={formData.username}
+          onChange={handleChange}
+          minLength={3}
+          maxLength={20}
+          pattern="[A-Za-z0-9_]+"
+          required
+        />
+        {formData.username &&
+          !/^[A-Za-z0-9_]{2,19}$/.test(formData.username) && (
+            <p className="text-xs text-red-500">
+              Username must contain 3-20 characters.
+            </p>
+          )}
+      </div>
+
+      {/* Number */}
+      <div className="space-y-1">
+        <label
+          className="block text-[13px] font-medium tracking-[0.01em] text-[#1a1c1d]"
+          htmlFor="register-email"
+        >Number</label>
+        <input
+          className="form-input w-full bg-white border border-[#e2e2e4] rounded-lg px-3 py-3 text-[15px] text-[#1a1c1d] placeholder-outline"
+          id="register-number"
+          name="number"
+          type="tel"
+          inputMode="numeric"
+          pattern="[6-9][0-9]{9}"
+          maxLength={10}
+          placeholder="Enter 10-digit mobile number"
+          value={formData.number}
+          onChange={handleChange}
+          required
+        />
+        {formData.number && !/^[6-9][0-9]{9}$/.test(formData.number) && (
+          <p className="text-xs text-red-500">
+            Enter a valid 10-digit mobile number.
+          </p>
+  )}
       </div>
 
       {/* Email */}
@@ -92,8 +154,16 @@ const RegisterForm = ({ onSubmit, onSwitchToLogin, isLoading, error }) => {
             placeholder="••••••••"
             value={formData.password}
             onChange={handleChange}
+            pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}"
+            title="Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character"
             required
           />
+          {formData.password && formData.password.length < 8 && (
+            <p className="text-xs text-red-500">
+              Password must be at least 8 characters.
+            </p>
+          )}
+          
           <button
             type="button"
             className="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-primary transition-colors"
