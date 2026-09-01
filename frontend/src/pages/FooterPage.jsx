@@ -6,7 +6,7 @@ const FooterPage = () => {
         
       {/* ── Footer ── */}
       <footer className="bg-bg-surface-container-low border-t border-[#e2e2e4] py-12 flex flex-col items-center gap-6 px-16">
-        <div className="text-[20px] font-bold text-primary">ShopSphere</div>
+        <div className="text-[20px] font-bold text-primary">ECom</div>
         <nav className="flex flex-wrap justify-center gap-6">
           {['About Us', 'Support', 'Privacy Policy', 'Terms of Service', 'Contact'].map((item) => (
             <a
@@ -18,7 +18,7 @@ const FooterPage = () => {
             </a>
           ))}
         </nav>
-        <p className="text-[13px] text-on-surface-variant">© 2024 ShopSphere Inc. All rights reserved.</p>
+        <p className="text-[13px] text-on-surface-variant">© 2026 ECom Inc. All rights reserved.</p>
       </footer>
     </div>
   )
