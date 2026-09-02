@@ -1,5 +1,5 @@
 import React from 'react'
-import { UserProfile, UserSettings } from '../features/user'
+import { UserProfile, UserSettings } from '..'
 
 /**
  * ProfilePage — aggregates UserProfile and UserSettings.

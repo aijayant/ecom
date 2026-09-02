@@ -13,9 +13,9 @@ const RegisterForm = ({ onSubmit, onSwitchToLogin, isLoading, error }) => {
   } = useForm({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      name: '',
+      fullName: '',
       username: '',
-      number: '',
+      phoneNumber: '',
       email: '',
       password: ''
     }
@@ -40,13 +40,13 @@ const RegisterForm = ({ onSubmit, onSwitchToLogin, isLoading, error }) => {
           Full Name
         </label>
         <input
-          {...register('name')}
-          className={`form-input w-full bg-white border ${errors.name ? 'border-red-500' : 'border-[#e2e2e4]'} rounded-lg px-3 py-3 text-[15px] text-[#1a1c1d] placeholder-outline`}
+          {...register('fullName')}
+          className={`form-input w-full bg-white border ${errors.fullName ? 'border-red-500' : 'border-[#e2e2e4]'} rounded-lg px-3 py-3 text-[15px] text-[#1a1c1d] placeholder-outline`}
           id="register-name"
           type="text"
           placeholder="name"
         />
-        {errors.name && <p className="text-xs text-red-500">{errors.name.message}</p>}
+        {errors.fullName && <p className="text-xs text-red-500">{errors.fullName.message}</p>}
       </div>
 
       {/* UserName */}
@@ -66,18 +66,18 @@ const RegisterForm = ({ onSubmit, onSwitchToLogin, isLoading, error }) => {
 
       {/* Number */}
       <div className="space-y-1">
-        <label className="block text-[13px] font-medium tracking-[0.01em] text-[#1a1c1d]" htmlFor="register-number">
-          Number
+        <label className="block text-[13px] font-medium tracking-[0.01em] text-[#1a1c1d]" htmlFor="register-phoneNumber">
+          Phone Number
         </label>
         <input
-          {...register('number')}
-          className={`form-input w-full bg-white border ${errors.number ? 'border-red-500' : 'border-[#e2e2e4]'} rounded-lg px-3 py-3 text-[15px] text-[#1a1c1d] placeholder-outline`}
-          id="register-number"
+          {...register('phoneNumber')}
+          className={`form-input w-full bg-white border ${errors.phoneNumber ? 'border-red-500' : 'border-[#e2e2e4]'} rounded-lg px-3 py-3 text-[15px] text-[#1a1c1d] placeholder-outline`}
+          id="register-phoneNumber"
           type="tel"
           inputMode="numeric"
           placeholder="Enter 10-digit mobile number"
         />
-        {errors.number && <p className="text-xs text-red-500">{errors.number.message}</p>}
+        {errors.phoneNumber && <p className="text-xs text-red-500">{errors.phoneNumber.message}</p>}
       </div>
 
       {/* Email */}

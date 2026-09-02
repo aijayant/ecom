@@ -2,20 +2,20 @@ import React from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 
 // ─── Core UI ─────────────────────────────────────────────────────────────────
-import Announcement from '../Components/Announcement/Announcement'
+import Announcement from '../shared/components/Announcement/Announcement'
 import { Navbar } from '../core/ui'
 import ProtectedRoute from '../core/security/components/ProtectedRoute'
-import FooterPage from '../pages/FooterPage'
+import Footer from '../shared/components/Footer/Footer'
 
 // ─── Pages ───────────────────────────────────────────────────────────────────
-import HomePage from '../pages/HomePage'
-import LoginPage from '../pages/LoginPage'
-import ProfilePage from '../pages/ProfilePage'
-import DashboardPage from '../pages/DashboardPage'
-import CartPage from '../pages/CartPage'
-import AdminPage from '../pages/AdminPage'
-import PaymentPage from '../pages/PaymentPage'
-import PlaceOrderPage from '../pages/PlaceOrderPage'
+import HomePage from '../features/catalog/pages/HomePage'
+import LoginPage from '../features/auth/pages/LoginPage'
+import ProfilePage from '../features/user/pages/ProfilePage'
+import DashboardPage from '../features/user/pages/DashboardPage'
+import CartPage from '../features/cart/pages/CartPage'
+import AdminPage from '../features/admin/pages/AdminPage'
+import PaymentPage from '../features/checkout/pages/PaymentPage'
+import PlaceOrderPage from '../features/orders/pages/PlaceOrderPage'
 
 /**
  * AppRoutes — single source of truth for all client-side routing.
@@ -65,7 +65,7 @@ const AppRoutes = () => {
           </Route>
 
         </Routes>
-        {!hidefooter && <FooterPage />}
+        {!hidefooter && <Footer />}
       </main>
     </>
   )

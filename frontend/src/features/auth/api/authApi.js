@@ -1,4 +1,4 @@
-import apiClient from '../../../core/config/apiConfig'
+import apiClient from '../../../api/client'
 
 /**
  * Auth API — maps to Spring Boot AuthController endpoints.
@@ -16,7 +16,7 @@ export const login = (credentials) =>
 
 /**
  * POST /auth/register
- * @param {{ name: string, email: string, password: string }} data
+ * @param {{ fullName: string, email: string, password: string }} data
  */
 export const register = (data) =>
   apiClient.post('/auth/register', data)

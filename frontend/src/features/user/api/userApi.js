@@ -1,4 +1,4 @@
-import apiClient from '../../../core/config/apiConfig'
+import apiClient from '../../../api/client'
 
 /**
  * User API — maps to Spring Boot UserController endpoints.

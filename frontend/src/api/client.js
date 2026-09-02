@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { getToken, getRefreshToken, setToken, clearTokens } from '../security/utils/tokenUtils'
+import { getToken, getRefreshToken, setToken, clearTokens } from '../core/security/utils/tokenUtils'
 
 /**
  * Global Axios Instance

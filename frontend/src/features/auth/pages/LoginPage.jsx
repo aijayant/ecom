@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import { useAuth } from '../features/auth'
-import LoginForm from '../features/auth/components/LoginForm'
-import RegisterForm from '../features/auth/components/RegisterForm'
+import { useAuth } from '..'
+import LoginForm from '../components/LoginForm'
+import RegisterForm from '../components/RegisterForm'
 import GoogleIcon from '@mui/icons-material/Google';
 import AppleIcon from '@mui/icons-material/Apple';
 
