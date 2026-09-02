@@ -48,7 +48,7 @@ const RegisterForm = ({ onSubmit, onSwitchToLogin, isLoading, error }) => {
           id="register-name"
           name="name"
           type="text"
-          placeholder="John Doe"
+          placeholder="name"
           value={formData.name}
           onChange={handleChange}
           minLength={2}
