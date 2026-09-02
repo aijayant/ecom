@@ -1,62 +1,61 @@
 /**
- * Token utilities — thin wrappers around localStorage.
- *
- * All JWT access/refresh token operations go through here so that
- * the storage strategy (localStorage, sessionStorage, httpOnly cookie)
- * can be swapped in one place.
+ * Token Utilities
+ * 
+ * Manages JWT tokens in memory. 
+ * Storing tokens in variables rather than localStorage prevents XSS attacks from reading them.
+ * Note: A full page reload will clear these variables. This is an interim security measure 
+ * until the backend implements HttpOnly cookies for the refresh token.
  */
 
-const ACCESS_TOKEN_KEY = 'ecom_access_token'
-const REFRESH_TOKEN_KEY = 'ecom_refresh_token'
+let inMemoryAccessToken = null
+let inMemoryRefreshToken = null
 
 // ─── Access Token ────────────────────────────────────────────────────────────
 
-/** Store the JWT access token */
 export const setToken = (token) => {
-  localStorage.setItem(ACCESS_TOKEN_KEY, token)
+  inMemoryAccessToken = token
 }
 
-/** Retrieve the JWT access token (null if absent) */
-export const getToken = () => localStorage.getItem(ACCESS_TOKEN_KEY)
+export const getToken = () => inMemoryAccessToken
 
-/** Remove the JWT access token */
 export const removeToken = () => {
-  localStorage.removeItem(ACCESS_TOKEN_KEY)
+  inMemoryAccessToken = null
 }
 
 // ─── Refresh Token ───────────────────────────────────────────────────────────
 
-/** Store the JWT refresh token */
 export const setRefreshToken = (token) => {
-  localStorage.setItem(REFRESH_TOKEN_KEY, token)
+  inMemoryRefreshToken = token
 }
 
-/** Retrieve the JWT refresh token (null if absent) */
-export const getRefreshToken = () => localStorage.getItem(REFRESH_TOKEN_KEY)
+export const getRefreshToken = () => inMemoryRefreshToken
 
-/** Remove the JWT refresh token */
 export const removeRefreshToken = () => {
-  localStorage.removeItem(REFRESH_TOKEN_KEY)
+  inMemoryRefreshToken = null
 }
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
-/** Returns true if a valid (non-expired) access token exists */
+/**
+ * Verifies if the current access token exists and has not expired.
+ * Does not verify the JWT signature (that is handled by the backend).
+ */
 export const isAuthenticated = () => {
   const token = getToken()
   if (!token) return false
 
   try {
-    // Decode payload (no signature verification — that's the server's job)
+    // Decode the JWT payload (base64) to check the 'exp' (expiration) claim
     const payload = JSON.parse(atob(token.split('.')[1]))
-    // exp is in seconds; Date.now() is in ms
     return payload.exp * 1000 > Date.now()
   } catch {
     return false
   }
 }
 
-/** Clear all auth tokens (used on logout) */
+/**
+ * Clears all token data from memory (used during logout).
+ */
 export const clearTokens = () => {
   removeToken()
   removeRefreshToken()
