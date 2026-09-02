@@ -15,7 +15,10 @@ import AppleIcon from '@mui/icons-material/Apple';
  */
 const LoginPage = () => {
   const [mode, setMode] = useState('login') // 'login' | 'register'
-  const { login, register, isLoading, error } = useAuth()
+  const { 
+    login, isLoginLoading, loginError,
+    register, isRegisterLoading, registerError 
+  } = useAuth()
 
   return (
 
@@ -58,15 +61,15 @@ const LoginPage = () => {
             <LoginForm
               onSubmit={login}
               onSwitchToRegister={() => setMode('register')}
-              isLoading={isLoading}
-              error={error}
+              isLoading={isLoginLoading}
+              error={loginError}
             />
           ) : (
             <RegisterForm
               onSubmit={register}
               onSwitchToLogin={() => setMode('login')}
-              isLoading={isLoading}
-              error={error}
+              isLoading={isRegisterLoading}
+              error={registerError}
             />
           )}
 

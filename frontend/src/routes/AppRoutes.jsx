@@ -36,16 +36,16 @@ const AppRoutes = () => {
 
   const location = useLocation();
 
- const isAdminPage = location.pathname === "/admin";
- const isLogin = location.pathname === "/login";
+  const isAdminPage = location.pathname === "/admin";
+  const isLogin = location.pathname === "/login";
 
- const hideNavbar = isAdminPage;
- const hidefooter = isAdminPage || isLogin;
+  const hideNavbar = isAdminPage;
+  const hidefooter = isAdminPage || isLogin;
   return (
     <>
-    {/* <Announcement/> */}
+      {/* <Announcement/> */}
       {!hideNavbar && <Navbar />}
-      
+
 
       <main>
         <Routes>
@@ -55,7 +55,7 @@ const AppRoutes = () => {
           <Route path="/login" element={<LoginPage />} />
 
           {/* ── Protected routes (require valid JWT) ───────────────────────── */}
-          <Route > {/*element={<ProtectedRoute />}*/}
+          <Route element={<ProtectedRoute />}>
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/cart" element={<CartPage />} />
@@ -65,7 +65,7 @@ const AppRoutes = () => {
           </Route>
 
         </Routes>
-      {!hidefooter && <FooterPage/>}
+        {!hidefooter && <FooterPage />}
       </main>
     </>
   )
