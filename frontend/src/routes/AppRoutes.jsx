@@ -1,5 +1,5 @@
 import React from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
 
 // ─── Core UI ─────────────────────────────────────────────────────────────────
 import Announcement from '../Components/Announcement/Announcement'
@@ -33,10 +33,19 @@ import PlaceOrderPage from '../pages/PlaceOrderPage'
  *   3. Add a <Route> in the correct section
  */
 const AppRoutes = () => {
+
+  const location = useLocation();
+
+ const isAdminPage = location.pathname === "/admin";
+ const isLogin = location.pathname === "/login";
+
+ const hideNavbar = isAdminPage;
+ const hidefooter = isAdminPage || isLogin;
   return (
     <>
     {/* <Announcement/> */}
-      <Navbar />
+      {!hideNavbar && <Navbar />}
+      
 
       <main>
         <Routes>
@@ -46,7 +55,7 @@ const AppRoutes = () => {
           <Route path="/login" element={<LoginPage />} />
 
           {/* ── Protected routes (require valid JWT) ───────────────────────── */}
-          <Route element={<ProtectedRoute />}>
+          <Route > {/*element={<ProtectedRoute />}*/}
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/cart" element={<CartPage />} />
@@ -56,8 +65,8 @@ const AppRoutes = () => {
           </Route>
 
         </Routes>
+      {!hidefooter && <FooterPage/>}
       </main>
-      <FooterPage/>
     </>
   )
 }
