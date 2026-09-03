@@ -14,7 +14,7 @@ public class PaginationResponse<T> {
 	private int pageSize;
 	private long totalElements;
 	private int totalPages;
-	private boolean isLast;
+	private boolean last;
 
 	public PaginationResponse(Page<T> page) {
 		this.content = page.getContent();
@@ -22,7 +22,7 @@ public class PaginationResponse<T> {
 		this.pageSize = page.getSize();
 		this.totalElements = page.getTotalElements();
 		this.totalPages = page.getTotalPages();
-		this.isLast = page.isLast();
+		this.last = page.isLast();
 	}
 
 }
