@@ -44,7 +44,7 @@ public class User extends BaseEntity {
 	private String email;
 
 	@NotBlank(message = "Phone number is required")
-	@Pattern(regexp = "^\\+?[1-9]\\d{1,14}$", message = "Phone number must be in valid E.164 format (e.g. +1234567890)")
+	@Pattern(regexp = "^[6-9][0-9]{9}$", message = "Phone number must be exactly 10 digits and start with 6-9")
 	@Column(name = "phone_number", unique = true, nullable = false)
 	private String phoneNumber;
 

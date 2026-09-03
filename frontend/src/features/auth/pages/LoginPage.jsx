@@ -17,7 +17,7 @@ const LoginPage = () => {
   const [mode, setMode] = useState('login') // 'login' | 'register'
   const { 
     login, isLoginLoading, loginError,
-    register, isRegisterLoading, registerError 
+    register, isRegisterLoading, registerError, registerFieldErrors 
   } = useAuth()
 
   return (
@@ -70,6 +70,7 @@ const LoginPage = () => {
               onSwitchToLogin={() => setMode('login')}
               isLoading={isRegisterLoading}
               error={registerError}
+              fieldErrors={registerFieldErrors}
             />
           )}
 

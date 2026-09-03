@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { registerSchema } from '../schemas'
 
-const RegisterForm = ({ onSubmit, onSwitchToLogin, isLoading, error }) => {
+const RegisterForm = ({ onSubmit, onSwitchToLogin, isLoading, error, fieldErrors }) => {
   const [showPassword, setShowPassword] = useState(false)
 
   const {
@@ -20,6 +20,14 @@ const RegisterForm = ({ onSubmit, onSwitchToLogin, isLoading, error }) => {
       password: ''
     }
   })
+
+  useEffect(() => {
+    if (fieldErrors) {
+      Object.keys(fieldErrors).forEach((field) => {
+         setError(field, { type: 'server', message: fieldErrors[field] })
+      })
+    }
+  }, [fieldErrors, setError])
 
   const submitHandler = (data) => {
     onSubmit?.(data)

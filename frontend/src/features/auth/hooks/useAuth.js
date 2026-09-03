@@ -4,7 +4,6 @@ import * as authApi from '../api/authApi'
 import { useAuthContext } from '../../../app/providers'
 import {
   setToken,
-  setRefreshToken,
   clearTokens,
 } from '../../../core/security/utils/tokenUtils'
 
@@ -24,7 +23,6 @@ export const useAuth = () => {
     onSuccess: ({ data }) => {
       // Sync tokens to in-memory utility storage (for Axios interceptors)
       setToken(data.accessToken)
-      if (data.refreshToken) setRefreshToken(data.refreshToken)
 
       // Sync token to React context (for UI reactivity)
       setAccessToken(data.accessToken)
@@ -38,7 +36,6 @@ export const useAuth = () => {
     mutationFn: (userData) => authApi.register(userData),
     onSuccess: ({ data }) => {
       setToken(data.accessToken)
-      if (data.refreshToken) setRefreshToken(data.refreshToken)
       setAccessToken(data.accessToken)
       navigate('/')
     }
@@ -60,11 +57,13 @@ export const useAuth = () => {
   return {
     login: loginMutation.mutate,
     isLoginLoading: loginMutation.isPending,
-    loginError: loginMutation.error?.response?.data?.message || loginMutation.error?.message,
+    loginError: loginMutation.error?.response?.data?.detail || loginMutation.error?.response?.data?.title || loginMutation.error?.message,
+    loginFieldErrors: loginMutation.error?.response?.data?.errors,
 
     register: registerMutation.mutate,
     isRegisterLoading: registerMutation.isPending,
-    registerError: registerMutation.error?.response?.data?.message || registerMutation.error?.message,
+    registerError: registerMutation.error?.response?.data?.detail || registerMutation.error?.response?.data?.title || registerMutation.error?.message,
+    registerFieldErrors: registerMutation.error?.response?.data?.errors,
 
     logout,
     isAuthenticated,
