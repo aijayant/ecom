@@ -8,9 +8,6 @@
  */
 
 let inMemoryAccessToken = null
-let inMemoryRefreshToken = null
-
-// ─── Access Token ────────────────────────────────────────────────────────────
 
 export const setToken = (token) => {
   inMemoryAccessToken = token
@@ -20,18 +17,6 @@ export const getToken = () => inMemoryAccessToken
 
 export const removeToken = () => {
   inMemoryAccessToken = null
-}
-
-// ─── Refresh Token ───────────────────────────────────────────────────────────
-
-export const setRefreshToken = (token) => {
-  inMemoryRefreshToken = token
-}
-
-export const getRefreshToken = () => inMemoryRefreshToken
-
-export const removeRefreshToken = () => {
-  inMemoryRefreshToken = null
 }
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -58,5 +43,4 @@ export const isAuthenticated = () => {
  */
 export const clearTokens = () => {
   removeToken()
-  removeRefreshToken()
 }

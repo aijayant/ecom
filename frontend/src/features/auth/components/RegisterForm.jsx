@@ -9,6 +9,7 @@ const RegisterForm = ({ onSubmit, onSwitchToLogin, isLoading, error, fieldErrors
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors }
   } = useForm({
     resolver: zodResolver(registerSchema),
@@ -52,6 +53,7 @@ const RegisterForm = ({ onSubmit, onSwitchToLogin, isLoading, error, fieldErrors
           className={`form-input w-full bg-white border ${errors.fullName ? 'border-red-500' : 'border-[#e2e2e4]'} rounded-lg px-3 py-3 text-[15px] text-[#1a1c1d] placeholder-outline`}
           id="register-name"
           type="text"
+          autoComplete="name"
           placeholder="name"
         />
         {errors.fullName && <p className="text-xs text-red-500">{errors.fullName.message}</p>}
@@ -67,6 +69,7 @@ const RegisterForm = ({ onSubmit, onSwitchToLogin, isLoading, error, fieldErrors
           className={`form-input w-full bg-white border ${errors.username ? 'border-red-500' : 'border-[#e2e2e4]'} rounded-lg px-3 py-3 text-[15px] text-[#1a1c1d] placeholder-outline`}
           id="register-username"
           type="text"
+          autoComplete="username"
           placeholder="username"
         />
         {errors.username && <p className="text-xs text-red-500">{errors.username.message}</p>}
@@ -82,6 +85,7 @@ const RegisterForm = ({ onSubmit, onSwitchToLogin, isLoading, error, fieldErrors
           className={`form-input w-full bg-white border ${errors.phoneNumber ? 'border-red-500' : 'border-[#e2e2e4]'} rounded-lg px-3 py-3 text-[15px] text-[#1a1c1d] placeholder-outline`}
           id="register-phoneNumber"
           type="tel"
+          autoComplete="tel"
           inputMode="numeric"
           placeholder="Enter 10-digit mobile number"
         />
@@ -98,6 +102,7 @@ const RegisterForm = ({ onSubmit, onSwitchToLogin, isLoading, error, fieldErrors
           className={`form-input w-full bg-white border ${errors.email ? 'border-red-500' : 'border-[#e2e2e4]'} rounded-lg px-3 py-3 text-[15px] text-[#1a1c1d] placeholder-outline`}
           id="register-email"
           type="email"
+          autoComplete="email"
           placeholder="name@example.com"
         />
         {errors.email && <p className="text-xs text-red-500">{errors.email.message}</p>}
@@ -114,6 +119,7 @@ const RegisterForm = ({ onSubmit, onSwitchToLogin, isLoading, error, fieldErrors
             className={`form-input w-full bg-white border ${errors.password ? 'border-red-500' : 'border-[#e2e2e4]'} rounded-lg px-3 py-3 pr-10 text-[15px] text-[#1a1c1d] placeholder-outline`}
             id="register-password"
             type={showPassword ? 'text' : 'password'}
+            autoComplete="new-password"
             placeholder="••••••••"
           />
           <button

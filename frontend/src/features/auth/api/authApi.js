@@ -23,11 +23,10 @@ export const register = (data) =>
 
 /**
  * POST /auth/refresh
- * Sends the stored refresh token to get a new access token.
- * @param {string} refreshToken
+ * Sends an empty payload; the HttpOnly cookie is attached automatically by the browser.
  */
-export const refreshToken = (refreshToken) =>
-  apiClient.post('/auth/refresh', { refreshToken })
+export const refreshToken = () =>
+  apiClient.post('/auth/refresh', {}, { withCredentials: true })
 
 /**
  * POST /auth/logout

@@ -1,74 +1,97 @@
 import React from 'react'
-import { Routes, Route, useLocation } from 'react-router-dom'
+import { createBrowserRouter, Outlet } from 'react-router-dom'
 
 // ─── Core UI ─────────────────────────────────────────────────────────────────
-import Announcement from '../shared/components/Announcement/Announcement'
 import { Navbar } from '../core/ui'
 import ProtectedRoute from '../core/security/components/ProtectedRoute'
 import Footer from '../shared/components/Footer/Footer'
 
-// ─── Pages ───────────────────────────────────────────────────────────────────
-import HomePage from '../features/catalog/pages/HomePage'
-import LoginPage from '../features/auth/pages/LoginPage'
-import ProfilePage from '../features/user/pages/ProfilePage'
-import DashboardPage from '../features/user/pages/DashboardPage'
-import CartPage from '../features/cart/pages/CartPage'
-import AdminPage from '../features/admin/pages/AdminPage'
-import PaymentPage from '../features/checkout/pages/PaymentPage'
-import PlaceOrderPage from '../features/orders/pages/PlaceOrderPage'
+/**
+ * Layout wrappers for different sections of the application
+ */
+const StorefrontLayout = () => (
+  <>
+    <Navbar />
+    <main>
+      <Outlet />
+    </main>
+    <Footer />
+  </>
+);
+
+const AuthLayout = () => (
+  <main className="min-h-screen bg-surface">
+    <Outlet />
+  </main>
+);
+
+const AdminLayout = () => (
+  <main>
+    <Outlet />
+  </main>
+);
 
 /**
- * AppRoutes — single source of truth for all client-side routing.
- *
- * Layout structure:
- *   <Navbar>                       ← always visible
- *   <Routes>
- *     Public routes
- *     <ProtectedRoute>             ← requires authentication
- *       Private routes
- *
- * To add a new page:
- *   1. Create the page in src/pages/
- *   2. Import it here
- *   3. Add a <Route> in the correct section
+ * Global Router Configuration
+ * Uses React Router v7 Data Router capabilities (`createBrowserRouter`)
+ * Native route-level lazy loading prevents shipping the admin/user dashboards to storefront visitors.
  */
-const AppRoutes = () => {
-
-  const location = useLocation();
-
-  const isAdminPage = location.pathname === "/admin";
-  const isLogin = location.pathname === "/login";
-
-  const hideNavbar = isAdminPage;
-  const hidefooter = isAdminPage || isLogin;
-  return (
-    <>
-      {/* <Announcement/> */}
-      {!hideNavbar && <Navbar />}
-
-
-      <main>
-        <Routes>
-
-          {/* ── Public routes ──────────────────────────────────────────────── */}
-          <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<LoginPage />} />
-
-          {/* ── Protected routes (require valid JWT) ───────────────────────── */}
-          <Route element={<ProtectedRoute />}>
-            <Route path="/dashboard" element={<DashboardPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/cart" element={<CartPage />} />
-            <Route path="/order" element={<PlaceOrderPage />} />
-            <Route path="/payment" element={<PaymentPage />} />
-            <Route path="/admin" element={<AdminPage />} />
-          </Route>
-
-        </Routes>
-        {!hidefooter && <Footer />}
-      </main>
-    </>
-  )
-}
-
-export default AppRoutes
+export const router = createBrowserRouter([
+  {
+    element: <AuthLayout />,
+    children: [
+      { 
+        path: '/login', 
+        lazy: () => import('../features/auth/pages/LoginPage').then(m => ({ Component: m.default })) 
+      },
+    ],
+  },
+  {
+    element: <StorefrontLayout />,
+    children: [
+      { 
+        path: '/', 
+        lazy: () => import('../features/catalog/pages/HomePage').then(m => ({ Component: m.default })) 
+      },
+      {
+        element: <ProtectedRoute />,
+        children: [
+          { 
+            path: '/dashboard', 
+            lazy: () => import('../features/user/pages/DashboardPage').then(m => ({ Component: m.default })) 
+          },
+          { 
+            path: '/profile', 
+            lazy: () => import('../features/user/pages/ProfilePage').then(m => ({ Component: m.default })) 
+          },
+          { 
+            path: '/cart', 
+            lazy: () => import('../features/cart/pages/CartPage').then(m => ({ Component: m.default })) 
+          },
+          { 
+            path: '/order', 
+            lazy: () => import('../features/orders/pages/PlaceOrderPage').then(m => ({ Component: m.default })) 
+          },
+          { 
+            path: '/payment', 
+            lazy: () => import('../features/checkout/pages/PaymentPage').then(m => ({ Component: m.default })) 
+          },
+        ],
+      },
+    ],
+  },
+  {
+    element: <AdminLayout />,
+    children: [
+      {
+        element: <ProtectedRoute />,
+        children: [
+          { 
+            path: '/admin', 
+            lazy: () => import('../features/admin/pages/AdminPage').then(m => ({ Component: m.default })) 
+          },
+        ],
+      },
+    ],
+  },
+]);

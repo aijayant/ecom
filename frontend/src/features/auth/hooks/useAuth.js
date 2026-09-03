@@ -57,13 +57,13 @@ export const useAuth = () => {
   return {
     login: loginMutation.mutate,
     isLoginLoading: loginMutation.isPending,
-    loginError: loginMutation.error?.response?.data?.detail || loginMutation.error?.response?.data?.title || loginMutation.error?.message,
-    loginFieldErrors: loginMutation.error?.response?.data?.errors,
+    loginError: loginMutation.error?.detail || loginMutation.error?.title || loginMutation.error?.message,
+    loginFieldErrors: loginMutation.error?.fieldErrors,
 
     register: registerMutation.mutate,
     isRegisterLoading: registerMutation.isPending,
-    registerError: registerMutation.error?.response?.data?.detail || registerMutation.error?.response?.data?.title || registerMutation.error?.message,
-    registerFieldErrors: registerMutation.error?.response?.data?.errors,
+    registerError: registerMutation.error?.detail || registerMutation.error?.title || registerMutation.error?.message,
+    registerFieldErrors: registerMutation.error?.fieldErrors,
 
     logout,
     isAuthenticated,

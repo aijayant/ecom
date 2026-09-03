@@ -1,5 +1,15 @@
 import axios from 'axios'
-import { getToken, getRefreshToken, setToken, clearTokens } from '../core/security/utils/tokenUtils'
+import { getToken, setToken, clearTokens } from '../core/security/utils/tokenUtils'
+
+export class ApiError extends Error {
+  constructor(status, title, detail, fieldErrors = {}) {
+    super(detail ?? title);
+    this.status = status;
+    this.title = title;
+    this.detail = detail;
+    this.fieldErrors = fieldErrors;
+  }
+}
 
 /**
  * Global Axios Instance
@@ -29,8 +39,14 @@ apiClient.interceptors.request.use(
   (error) => Promise.reject(error)
 )
 
-// Mutex flag to prevent multiple concurrent refresh token requests
+// Mutex flag and queue to prevent multiple concurrent refresh token requests
 let isRefreshing = false
+let pendingQueue = []
+
+function resolvePending(token) {
+  pendingQueue.forEach((resolve) => resolve(token));
+  pendingQueue = [];
+}
 
 /**
  * Response Interceptor
@@ -42,47 +58,63 @@ apiClient.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config
 
-    // Proceed if the error is 401 and we haven't already attempted to retry this specific request
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    // Proceed if the error is 401, we haven't retried, and it's not an auth request (like login)
+    if (
+      error.response?.status === 401 && 
+      !originalRequest._retry && 
+      !originalRequest.url.includes('/auth/login') && 
+      !originalRequest.url.includes('/auth/register')
+    ) {
       
-      // If a refresh is already in progress, reject to avoid infinite loops/race conditions
+      // If a refresh is already in progress, queue this request
       if (isRefreshing) {
-        return Promise.reject(error)
+        return new Promise((resolve, reject) => {
+          pendingQueue.push((token) => {
+            if (!token) return reject(error);
+            originalRequest._retry = true;
+            originalRequest.headers.Authorization = `Bearer ${token}`;
+            resolve(apiClient(originalRequest));
+          });
+        });
       }
 
       originalRequest._retry = true
       isRefreshing = true
 
       try {
-        const refreshToken = getRefreshToken()
-
-        if (!refreshToken) {
-          throw new Error('Refresh token not found')
-        }
-
-        // Request a new access token using the refresh token
-        const { data } = await axios.post(`${apiClient.defaults.baseURL}/auth/refresh`, {
-          refreshToken
-        }, { withCredentials: true })
+        // Request a new access token (the HttpOnly cookie is attached automatically)
+        const { data } = await axios.post(`${apiClient.defaults.baseURL}/auth/refresh`, {}, { 
+          withCredentials: true 
+        })
 
         // Update in-memory storage with the new access token
         setToken(data.accessToken)
         
+        // Resolve all queued requests with the new token
+        resolvePending(data.accessToken)
+        
         // Update the failed request's header and retry it
         originalRequest.headers.Authorization = `Bearer ${data.accessToken}`
-        isRefreshing = false
-        
         return apiClient(originalRequest)
       } catch (refreshError) {
-        // If the refresh request fails (e.g., refresh token is expired), force a logout
-        isRefreshing = false
+        // If the refresh request fails, force a logout
+        resolvePending(null)
         clearTokens()
         window.location.href = '/login'
         return Promise.reject(refreshError)
+      } finally {
+        isRefreshing = false
       }
     }
 
-    return Promise.reject(error)
+    // Normalize Spring's RFC 9457 ProblemDetail into ApiError
+    const problem = error.response?.data ?? {}
+    throw new ApiError(
+      error.response?.status ?? 0,
+      problem.title ?? error.message,
+      problem.detail,
+      problem.errors ?? {}
+    )
   }
 )
 
