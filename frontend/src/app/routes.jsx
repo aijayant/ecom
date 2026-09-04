@@ -5,9 +5,14 @@ import { createBrowserRouter, Outlet } from 'react-router-dom'
 import { Navbar } from '../core/ui'
 import ProtectedRoute from '../core/security/components/ProtectedRoute'
 import Footer from '../shared/components/Footer/Footer'
+import AdminSidebar from '../shared/components/AdminSidebar/AdminSidebar'
+import AdminHeader from '../shared/components/AdminHeader/AdminHeader'
 
 /**
- * Layout wrappers for different sections of the application
+ * Layout wrappers for different sections of the application.
+ *
+ * Each layout defines the visual "shell" (navbar, sidebar, footer, etc.)
+ * that wraps the pages rendered inside it via React Router's <Outlet />.
  */
 const StorefrontLayout = () => (
   <>
@@ -25,10 +30,28 @@ const AuthLayout = () => (
   </main>
 );
 
+/**
+ * AdminLayout — renders the dark sidebar on the left, header on top,
+ * and the routed admin page content in the center.
+ */
 const AdminLayout = () => (
-  <main>
-    <Outlet />
-  </main>
+  <div className="flex min-h-screen bg-surface">
+    <AdminSidebar />
+    <div className="flex-1 flex flex-col min-w-0">
+      <AdminHeader />
+      <main className="flex-1 p-6 overflow-auto">
+        <Outlet />
+      </main>
+      {/* Admin Footer */}
+      <footer className="px-6 py-3 border-t border-outline-variant/30 flex items-center justify-between text-[11px] text-on-surface-variant">
+        <span>© 2024 ECom Admin. All rights reserved.</span>
+        <span className="flex items-center gap-1.5">
+          <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
+          System operational
+        </span>
+      </footer>
+    </div>
+  </div>
 );
 
 /**
@@ -84,14 +107,19 @@ export const router = createBrowserRouter([
     element: <AdminLayout />,
     children: [
       {
-        element: <ProtectedRoute />,
+        element: <ProtectedRoute requiredRole="ADMIN" />,
         children: [
           { 
             path: '/admin', 
             lazy: () => import('../features/admin/pages/AdminPage').then(m => ({ Component: m.default })) 
+          },
+          { 
+            path: '/admin/users', 
+            lazy: () => import('../features/admin/pages/UsersPage').then(m => ({ Component: m.default })) 
           },
         ],
       },
     ],
   },
 ]);
+

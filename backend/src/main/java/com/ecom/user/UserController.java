@@ -49,13 +49,13 @@ public class UserController {
 	}
 	
 	@GetMapping("/{id}")
-	@PreAuthorize("hasAuthority('USER')")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public UserResponse getUser(@PathVariable("id") Long id) {
 		return userService.getUserById(id);
 	}
 	
 	@GetMapping
-	@PreAuthorize("hasAuthority('USER')")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public PaginationResponse<UserResponse> getAllUsers(@PageableDefault(size = 20) Pageable pageable) {
 		return userService.getAllUsers(pageable);
 	}

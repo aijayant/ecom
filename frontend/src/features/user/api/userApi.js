@@ -28,3 +28,32 @@ export const updateProfile = (data) =>
  */
 export const getUserRoles = (userId) =>
   apiClient.get(`/user/${userId}/roles`)
+
+/**
+ * GET /v1/users
+ * Fetch paginated users.
+ * @param {Object} params - { page, size, sort }
+ */
+export const getUsers = (params) =>
+  apiClient.get('/v1/users', { params })
+
+/**
+ * POST /v1/users
+ * Creates a new user.
+ */
+export const createUser = (payload) =>
+  apiClient.post('/v1/users', payload)
+
+/**
+ * PUT /v1/users/{id}
+ * Updates an existing user.
+ */
+export const updateUser = (id, payload) =>
+  apiClient.put(`/v1/users/${id}`, payload)
+
+/**
+ * DELETE /v1/users/{id}
+ * Deletes a user.
+ */
+export const deleteUser = (id) =>
+  apiClient.delete(`/v1/users/${id}`)

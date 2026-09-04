@@ -139,7 +139,8 @@ public class UserService {
 
 	private UserResponse convertToResponse(User user) {
 		return new UserResponse(user.getId(), user.getUsername(), user.getEmail(), user.getPhoneNumber(),
-				user.getFullName(), user.getRole() != null ? user.getRole().getRoleName() : null);
+				user.getFullName(), user.getRole() != null ? user.getRole().getRoleName() : null,
+				user.getIsActive(), user.getCreatedDate());
 	}
 
 }

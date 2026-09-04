@@ -17,6 +17,8 @@ import com.ecom.user.dto.UserResponse;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.transaction.annotation.Transactional;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -43,6 +45,7 @@ public class AuthService {
 //		return new AuthResponse(jwtToken, refreshToken.getToken(), "Login successful");
 //	}
 	
+	@Transactional
 	public AuthResponse login(LoginRequest request) {
 
 	    authenticationManager.authenticate(
@@ -61,7 +64,7 @@ public class AuthService {
 
 	    String username = user.getUsername();
 
-	    String jwtToken = jwtUtil.generateToken(username);
+	    String jwtToken = jwtUtil.generateToken(username, user.getRole().getRoleName());
 
 	    RefreshToken refreshToken =
 	        refreshTokenService.createRefreshToken(username);
@@ -73,7 +76,7 @@ public class AuthService {
 	    );
 	}
 
-
+	@Transactional
 	public AuthResponse register(RegisterRequest request) {
 
 		CreateUserRequest createUserRequest = new CreateUserRequest();
@@ -86,12 +89,13 @@ public class AuthService {
 
 		UserResponse user = userService.createUser(createUserRequest);
 
-		String jwtToken = jwtUtil.generateToken(user.getUsername());
+		String jwtToken = jwtUtil.generateToken(user.getUsername(), user.getRoleName());
 		RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getUsername());
 		return new AuthResponse(jwtToken, refreshToken.getToken(), "User registered successfully");
 
 	}
 
+	@Transactional(readOnly = true)
 	public AuthResponse refreshToken(RefreshTokenRequest request) {
 		// CUSTOM LOGIC:
 		// Find the token -> Verify it's not expired -> Get the User -> Generate new
@@ -99,7 +103,7 @@ public class AuthService {
 
 		return refreshTokenService.findByToken(request.getRefreshToken()).map(refreshTokenService::verifyExpiration)
 				.map(RefreshToken::getUser).map(user -> {
-					String newAccessToken = jwtUtil.generateToken(user.getUsername());
+					String newAccessToken = jwtUtil.generateToken(user.getUsername(), user.getRole().getRoleName());
 					return new AuthResponse(newAccessToken, request.getRefreshToken(),
 							"Token refreshed successfully");
 				}).orElseThrow(() -> new ResourceNotFoundException("Refresh token is not in database!"));

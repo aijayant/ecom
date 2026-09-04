@@ -1,5 +1,6 @@
 package com.ecom.user.dto;
 
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,5 +19,7 @@ public class UserResponse {
 	private String phoneNumber;
 	private String fullName;
 	private String roleName;
+	private Boolean isActive;
+	private LocalDateTime createdDate;
 
 }

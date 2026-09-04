@@ -35,8 +35,8 @@ public class JwtUtil {
 	}
 
 	// Job 1: Generate a token when user logs in
-	public String generateToken(String username) {
-		return Jwts.builder().subject(username).issuedAt(new Date(System.currentTimeMillis()))
+	public String generateToken(String username, String role) {
+		return Jwts.builder().subject(username).claim("role", role).issuedAt(new Date(System.currentTimeMillis()))
 				.expiration(new Date(System.currentTimeMillis() + jwtProperties.expiration())).signWith(getSigningKey())
 				.compact();
 	}

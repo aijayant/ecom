@@ -1,4 +1,6 @@
-import React, { createContext, useContext, useState } from 'react'
+import React, { createContext, useContext, useState, useEffect } from 'react'
+import axios from 'axios'
+import { setToken } from '../core/security/utils/tokenUtils'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 /**
@@ -26,12 +28,32 @@ export const AuthProvider = ({ children }) => {
     // Access token is held in React state (memory) rather than localStorage
     // to mitigate XSS (Cross-Site Scripting) vulnerability risks.
     const [accessToken, setAccessToken] = useState(null)
+    const [isBootstrapping, setIsBootstrapping] = useState(true)
+
+    useEffect(() => {
+        const bootstrapAuth = async () => {
+            try {
+                const { data } = await axios.post(
+                    `${import.meta.env.VITE_API_BASE_URL ?? '/api/v1'}/auth/refresh`,
+                    {},
+                    { withCredentials: true }
+                )
+                setAccessToken(data.accessToken)
+                setToken(data.accessToken)
+            } catch (err) {
+                // Not authenticated or refresh token expired
+            } finally {
+                setIsBootstrapping(false)
+            }
+        }
+        bootstrapAuth()
+    }, [])
 
     // Derived state to easily check authentication status
     const isAuthenticated = !!accessToken
 
     return (
-        <AuthContext.Provider value={{ accessToken, setAccessToken, isAuthenticated }}>
+        <AuthContext.Provider value={{ accessToken, setAccessToken, isAuthenticated, isBootstrapping }}>
             {children}
         </AuthContext.Provider>
     )
